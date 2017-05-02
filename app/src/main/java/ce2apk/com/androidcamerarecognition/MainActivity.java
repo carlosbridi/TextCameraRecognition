@@ -1,6 +1,7 @@
 package ce2apk.com.androidcamerarecognition;
 
 import android.Manifest;
+import android.app.ListActivity;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -19,13 +20,19 @@ import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends ListActivity {
 
     SurfaceView cameraView;
     TextView textView;
     CameraSource cameraSource;
     final int RequestCameraPermissionID = 1001;
+
+    final List<String> listaPlacas = new ArrayList<String>();
 
 
     @Override
@@ -55,6 +62,9 @@ public class MainActivity extends AppCompatActivity {
 
         cameraView = (SurfaceView) findViewById(R.id.surface_view);
         textView = (TextView) findViewById(R.id.text_view);
+
+        final PlacasAdapter placasAdapter = new PlacasAdapter(getApplicationContext(), listaPlacas);
+        setListAdapter(placasAdapter);
 
         TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplicationContext()).build();
         if (!textRecognizer.isOperational()) {
@@ -106,19 +116,32 @@ public class MainActivity extends AppCompatActivity {
                 public void receiveDetections(Detector.Detections<TextBlock> detections) {
 
                     final SparseArray<TextBlock> items = detections.getDetectedItems();
+
                     if(items.size() != 0)
                     {
                         textView.post(new Runnable() {
                             @Override
                             public void run() {
                                 StringBuilder stringBuilder = new StringBuilder();
-                                for(int i =0;i<items.size();++i)
-                                {
-                                    TextBlock item = items.valueAt(i);
-                                    stringBuilder.append(item.getValue());
-                                    stringBuilder.append("\n");
+                                for(int i =0;i<items.size();++i){
+
+                                    Pattern patternHifen = Pattern.compile("[a-zA-Z]{3,3}-\\d{4,4}");
+                                    Matcher matcherHifer = patternHifen.matcher(items.valueAt(i).getValue());
+
+                                    Pattern pattern = Pattern.compile("[a-zA-Z]{3,3}\\d{4,4}");
+                                    Matcher matcher = pattern.matcher(items.valueAt(i).getValue());
+
+                                    Log.i("Placa: ", items.valueAt(i).getValue());
+
+                                    if ((matcherHifer.find()) || (matcher.find())) {
+                                        TextBlock item = items.valueAt(i);
+
+                                        if (!listaPlacas.contains((String) item.getValue())) {
+                                            listaPlacas.add(item.getValue());
+                                            placasAdapter.notifyDataSetChanged();
+                                        }
+                                    }
                                 }
-                                textView.setText(stringBuilder.toString());
                             }
                         });
                     }

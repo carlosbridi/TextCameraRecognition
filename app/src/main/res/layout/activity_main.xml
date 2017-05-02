@@ -4,21 +4,41 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     tools:context=".MainActivity">
 
-    <SurfaceView
-        android:id="@+id/surface_view"
-
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <SurfaceView
+            android:id="@+id/surface_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.30"
+            android:layout_alignParentTop="true" />
+
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.70"
+            android:layout_above="@+id/text_view"
+            android:layout_centerHorizontal="true" />
+
+    </LinearLayout>
+
+
 
     <TextView
         android:id="@+id/text_view"
         android:text="No Text"
-        android:layout_alignParentBottom="true"
         android:textColor="@android:color/white"
         android:textSize="20sp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+
+
 </RelativeLayout>
