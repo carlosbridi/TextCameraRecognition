@@ -17,7 +17,6 @@
             android:layout_height="match_parent"
             android:layout_weight="0.30"
             android:layout_alignParentTop="true" />
-
         <ListView
             android:id="@android:id/list"
             android:layout_width="match_parent"
@@ -27,18 +26,4 @@
             android:layout_centerHorizontal="true" />
 
     </LinearLayout>
-
-
-
-    <TextView
-        android:id="@+id/text_view"
-        android:text="No Text"
-        android:textColor="@android:color/white"
-        android:textSize="20sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true" />
-
-
 </RelativeLayout>
